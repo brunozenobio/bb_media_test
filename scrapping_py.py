@@ -1,6 +1,8 @@
 from playwright.sync_api import sync_playwright, Playwright
 import time
 import re
+import json
+
 
 ## usare la libreria de playwright
 
@@ -104,9 +106,10 @@ def run():
 
 
         ## ahora quiero agregar el link de cada serie o pelicula a un diccionario
-        series_and_movies = {"películas": [], "series": []} 
+        series_and_movies = {"peliculas": [], "series": []} 
 
         ## para hacerlo itereo sobre los url de secciones, y generando un set
+        
         for key,programa in series_and_movies_category.items():
             url_link = set()
             for link_programa in programa:
@@ -146,46 +149,19 @@ def run():
 
                     ## por ultimo agrego los url de cada pelicula o serie a un diccionario que sera el retornado por la funcion
 
-                    if key == "películas":
-                        for movie in url_link:
-                            series_and_movies["películas"].append(movie)
-                    else:
-                        for movie in url_link:
-                            series_and_movies["series"].append(movie)
+            if key == "películas":
+                for movie in url_link:
+                    series_and_movies["peliculas"].append(movie)
+            else:
+                for movie in url_link:
+                    series_and_movies["series"].append(movie)
         return series_and_movies
 
     
 
 
-def get_data(datos):
-    with sync_playwright() as playwright:
-        page = init_playwright(playwright)
-
-        datos_movies_series = {}
-
-        for key,valores in datos.items():
-            for valor in valores:
-
-                page.goto(valor)
-                page.wait_for_timeout(3000)
-                div_programa = page.locator("div.inner")
-                titulo = div_programa.locator("h2").text
-                metadata = div_programa.locator("div").all()
-
-
-                informacion = metadata[0].locator("li")
-                genero = informacion[0].text
-                duracion = informacion[1].text
-
-                sinopsis = metadata[1].locator("p").text
-
-                if type == "serie":
-                    duracion = re.search("\d",duracion)
-                    return {'titulo':titulo,'genero':genero,'temporadas':duracion,'sinopsis':sinopsis}
-
-
-                datos_movies_series[datos['titulo']] = datos
-        return datos_movies_series
+with open('mi_diccionario.json', 'w') as archivo_json:
+    json.dump(run(), archivo_json, indent=4)
 
     
 
