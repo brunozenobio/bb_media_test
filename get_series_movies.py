@@ -77,7 +77,7 @@ def get_movie(div_programa):
         # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
         duracion_horas = caracteristicas_lista[4].inner_text() 
         extract_horas = re.search(r"(\d*)hr[ ]*(\d*)[ min]*",duracion_horas)
-        print(extract_horas)
+
     else:
         rating = "N/A"
         genero = "N/A"
@@ -92,7 +92,6 @@ def get_movie(div_programa):
         if minutos is not None:
             duracion_movie += int(minutos) if minutos else 0
 
-    print(duracion_movie)
     
 
     # del segun div de caracteristicas busco la etiquet p que tiene la sinopsis
@@ -194,7 +193,17 @@ def get_chapters(page,div_programa):
             url = url_base + info_episodio.get_attribute("href")
             num_episodio = info_episodio.locator("h3.episode-name-atc").inner_text()
             duracion = info_episodio.locator("p.numbers").locator("span").all()[1].inner_text()
-            duracion_min = int(re.search(r"\d"),duracion)
+            duracion_capitulo = re.search(r"(\d*)hr[ ]*(\d*)[ min]*",duracion)
+
+
+            duracion_min = 0
+            if duracion_capitulo:
+                horas = duracion_capitulo.group(1)
+                minutos = duracion_capitulo.group(2)
+                if horas is not None:
+                    duracion_min += int(horas) * 60
+                if minutos is not None:
+                    duracion_min += int(minutos) if minutos else 0
 
             episodios.append({"episode":num_episodio,"duration(min)":duracion_min,"url_episode":url})
 
