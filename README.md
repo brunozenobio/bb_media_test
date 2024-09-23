@@ -38,14 +38,14 @@ Tambien, para logral la mayor optimización del tiempo de scrapping, se uso la l
 
 ### Entorno de codigo
 
-El script principal que ejecuta todo el proceso es [scrapping.py](./scrapping_py.py),este se encarga de realizar las siguientes tareas:
+El script principal que ejecuta todo el proceso es [scrapping.py](./scrapping.py),este se encarga de realizar las siguientes tareas:
 - **`realizar la obtención de series y peliculas`**: Para en la carpeta [scripts](./scripts/), estan todos los scripts necesarios para realizar esas tareas:
     - [init_pluto_tv.py](./scripts/init_pluto_tv.py) : Inicia Playwright y abre un enlace
     - [get_series_demand.py](./scripts/get_on_demand.py) : Con pluto iniciado va a la seccion On Demand, y obtiene los enlaces de todas las series y peliculas.
 
     - [get_series_movies.py](./scripts/get_series_movies.py) : Para cada serie y pelicula, guarda las peliculas en un csv y las series con sus episodios en un json.
 
-    - [get_channels](./scripts/channels.py) : Obtiene todos los canales y sus url y los guarda en un csv.
+    - [get_channels](./scripts/get_channels.py) : Obtiene todos los canales y sus url y los guarda en un csv.
 - **`Monitorear el tiempo de ejecución`**: Para cada proceso realizo, imprime el tiempo tardado en ejecutarse, lo cual permite tener un mejor control y poder conocer que secciones optimizar.
 
 
@@ -53,9 +53,9 @@ El script principal que ejecuta todo el proceso es [scrapping.py](./scrapping_py
 
 
 Finalmente se guardaron los datos en la carpeta [database](./database), la cual contiene:
-- **`movies.csv `**: Una tabla con las peliculas y su metadata.
-- **`series.json`**: Un json con las series y su metadata los episodios de cada serie y sus metadatas
-- **`channels.csv`**: Una tabla con la información (nombre y url) de cada canal
+- [**`movies.csv `**](./database/movies.csv): Una tabla con las peliculas y su metadata.
+- [**`series.json`**](./database/series.json): Un json con las series y su metadata los episodios de cada serie y sus metadatas
+- [**`channels.csv`**](./database/channels.csv): Una tabla con la información (nombre y url) de cada canal
 
 # 🛠️ Instalación
 
@@ -107,6 +107,21 @@ Tiempo total de ejecución:  segundos
 
 Este fue posible, gracias a la optimización lograda trabajando con multiprocesos.
 
+### Peliculas:
+![](./images/movies.png)  
+
+Se obtuvo un total de 1589 peliculas y un total de 22 generos
+
+### Series:
+![](./images/series.png)
+Se obtuvo un total de 211 series con 18 generos.
+
+La serie con mayor cantidad de temporadas es South Park con 25 temporadas.
+
+### Canales
+![](./images/channels.png)
+
+Se obtuvo un total de 53 canales 
 
 
 ## Bibliografias
