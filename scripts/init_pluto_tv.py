@@ -3,15 +3,20 @@ from playwright.sync_api import sync_playwright, Playwright
 
 
 
-def init_playwright(playwright: Playwright):
+def init_playwright():
     """"
-    Esta funcion, se encarga de inicializar un contexto de pagina para realizar el scrapping
-    
+    Inicializa Playwright y crea un contexto de navegador.
     """
-    with sync_playwright() as playwright:
-        browser = playwright.chromium.launch(headless=False)
-        page = browser.new_page()
-        return page
+    playwright = sync_playwright().start()
+    chromium = playwright.chromium
+    browser = chromium.launch(headless=False, args=['--disable-blink-features=AutomationControlled'])
+    context = browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+    page = context.new_page()
+    context.add_init_script("""
+        Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+    """)
+    page.wait_for_load_state()
+    return page, browser, playwright
 
 
 def init_pluto(page,url):
@@ -24,4 +29,4 @@ def init_pluto(page,url):
     
     """
     page.goto(url) # va a la pagina
-    page.wait_for_load_state('networkidle') #espera que se cargue
+    page.wait_for_load_state() #espera que se cargue

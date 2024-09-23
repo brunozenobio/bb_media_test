@@ -236,7 +236,7 @@ def get_grilla(page,canales,url_base):
 
 
 def run():
-    page = init_playwright()
+    page = init_playwright(playwright=Playwright)
     url_base = "https://pluto.tv" # url base de la plataforma de pluto
     init_pluto(page,url_base)
     goto_on_demand(page)

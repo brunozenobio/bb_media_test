@@ -122,3 +122,22 @@ def get_url_series_movies(page,programas,url_base):
             series_and_movies.append(movie_link)
 
     return series_and_movies  
+
+
+
+
+def run():
+    page, browser, playwright = init_playwright()
+    url_base = "https://pluto.tv"
+    init_pluto(page, url_base)
+    goto_on_demand(page)
+
+    programas = get_url_secciones(page, url_base)
+    series_movies = get_url_series_movies(page, programas, url_base)
+
+    browser.close()  # Cerramos el navegador al finalizar
+    playwright.stop()  # Detenemos Playwright para evitar el error del loop
+    
+    return series_movies
+
+print(run())
