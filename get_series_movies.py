@@ -17,13 +17,18 @@ def get_data(url):
         try:
             page.goto(url)
 
-            page.wait_for_load_state()
+            page.wait_for_load_state("domcontentloaded")
+
+            page.wait_for_selector("div.inner")
+
 
             div_programa = page.locator("div.inner")
 
 
+
+
             if "movies" in url:
-                
+
                 movie = get_movie(div_programa)
                 movie["url"] = url
                 return "movie",movie
@@ -55,22 +60,32 @@ def get_movie(div_programa):
 
     
     """
-
-
+    
     titulo = div_programa.locator("h2").inner_text() if div_programa.locator("h2").count() > 0  else "N/A" # titulo de la pelicula
+    print(titulo)
+    
 
     caracteristicas = div_programa.locator("div").all() # div con las caracteristicas
 
-
-    
     caracteristicas_lista = caracteristicas[0].locator("li").all() # en esta lista estaran las caracteristicas rating,duracion genero
+    
+
     rating = caracteristicas_lista[0].locator("span.rating").inner_text() # saco rating de un span, en el primer li encontrado
     genero = caracteristicas_lista[2].inner_text() # saco el genero en el 3 li encontrado
 
     # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
     duracion_horas = caracteristicas_lista[4].inner_text() 
-    extract_horas = re.search(r"(\d+)hrs?\s*(\d+)\s*min*",duracion_horas)
-    duracion_movie = int(extract_horas.group(1)) * 60 + int(extract_horas.group(2))
+    extract_horas = re.search(r"(?:(\d+) hrs? ?)?(?:(\d+) min)?",duracion_horas)
+
+    duracion_movie = 0
+    if extract_horas:
+        horas = extract_horas.group(1)
+        minutos = extract_horas.group(2)
+        if horas is not None:
+            duracion_movie += int(horas) * 60
+        if minutos is not None:
+            duracion_movie += duracion_horas
+    
 
     # del segun div de caracteristicas busco la etiquet p que tiene la sinopsis
     sinopsis = caracteristicas[1].locator("p").inner_text()
@@ -92,13 +107,15 @@ def get_serie(div_programa):
 
     div_information = div_programa.locator("div").all()
 
-    titulo = div_programa[0].inner_text()
-    caracteristicas = div_information.locator("li").all()
+    titulo = div_information[0].inner_text()
+    caracteristicas = div_information[1].locator("li").all()
 
     rating = caracteristicas[0].locator("span.rating").inner_text()
     genero = caracteristicas[2].inner_text()
 
-    temporadas = int(re.search(r"\d+",caracteristicas[6].inner_text()))
+    temporadas_text = re.search(r"\d+",caracteristicas[6].inner_text())
+    if temporadas_text:
+        temporadas = int(temporadas_text)
 
     sinopsis = div_information.locator("//section[contains(@class,'description-0-2-')]").local("p").inner_text()
 
@@ -123,7 +140,7 @@ def get_series_movies(datos):
     movies = []
     series = []
 
-    with ThreadPoolExecutor(max_workers=4) as executor: ## clase para trabajar con multihilos
+    with ThreadPoolExecutor(max_workers=3) as executor: ## clase para trabajar con multihilos
         futures = [executor.submit(get_data, valor) for key, valores in datos.items() for valor in valores]
 
         for i, future in enumerate(as_completed(futures), 1):

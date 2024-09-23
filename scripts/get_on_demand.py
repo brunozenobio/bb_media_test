@@ -140,4 +140,4 @@ def run():
     
     return series_movies
 
-print(run())
+len(run())
