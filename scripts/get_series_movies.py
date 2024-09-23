@@ -244,8 +244,8 @@ def get_series_movies(datos):
 
 def write_json(movies,series):
     movies.to_csv("./database/movies.csv",index=False)
-    with open("./database/series.json", "w") as json_file:
-        json.dump(series, json_file, indent=5)
+    with open("./database/series.json", "w",encoding='utf-8') as json_file:
+        json.dump(series, json_file,ensure_ascii=False, indent=5)
 
 
     

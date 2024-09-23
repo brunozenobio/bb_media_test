@@ -2,7 +2,7 @@ from scripts.get_on_demand import *
 import time
 from scripts.init_pluto_tv import *
 from scripts.get_series_movies import * 
-from scripts.channels import *
+from scripts.get_channels import *
 
 
 def scrape_pluto_tv_data():
