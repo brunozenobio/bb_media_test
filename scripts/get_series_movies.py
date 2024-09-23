@@ -76,7 +76,7 @@ def get_movie(div_programa):
 
         # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
         duracion_horas = caracteristicas_lista[4].inner_text() 
-        extract_horas = re.search(r"(\d*)hr[ ]*(\d*)[ min]*",duracion_horas)
+        extract_horas = re.search(r"(\d*)[hr ]*(\d*)[ min]*",duracion_horas)
 
     else:
         rating = "N/A"
@@ -145,7 +145,7 @@ def get_serie(page,div_programa):
 
     temporadas_total = get_chapters(page,div_programa)
 
-    return {"title":titulo,"genre":genero,"classification":rating,"seasons":temporadas,"synopsis":sinopsis,"seasons":temporadas_total}
+    return {"title":titulo,"genre":genero,"classification":rating,"synopsis":sinopsis,"seasons":temporadas_total}
 
 
 
@@ -193,7 +193,7 @@ def get_chapters(page,div_programa):
             url = url_base + info_episodio.get_attribute("href")
             num_episodio = info_episodio.locator("h3.episode-name-atc").inner_text()
             duracion = info_episodio.locator("p.numbers").locator("span").all()[1].inner_text()
-            duracion_capitulo = re.search(r"(\d*)hr[ ]*(\d*)[ min]*",duracion)
+            duracion_capitulo = re.search(r"(\d*)[hr ]*(\d*)[ min]*",duracion)
 
 
             duracion_min = 0
@@ -207,7 +207,7 @@ def get_chapters(page,div_programa):
 
             episodios.append({"episode":num_episodio,"duration(min)":duracion_min,"url_episode":url})
 
-        temporadas.append({'season':selector_temporadas.inner_text(),"episodes":episodios})
+        temporadas.append({'season':opcion.inner_text(),"episodes":episodios})
 
     return temporadas
 
@@ -229,7 +229,7 @@ def get_series_movies(datos):
     series = []
 
     with ThreadPoolExecutor(max_workers=5) as executor: ## clase para trabajar con multihilos
-        futures = [executor.submit(get_data, valor) for key, valores in datos.items() for valor in valores]
+        futures = [executor.submit(get_data, url) for url in datos]
 
         for i, future in enumerate(as_completed(futures), 1):
             try:
@@ -246,12 +246,12 @@ def get_series_movies(datos):
 
     return movies,series
 
-if __name__ == "__main__":
-    with open('mi_diccionario.json', 'r') as archivo_json:
-        datos = json.load(archivo_json)
 
-    resultado = get_series_movies(datos)
+def write_json(movies,series):
     with open("movies.json", "w") as json_file:
-        json.dump(resultado[0], json_file, indent=4)
+        json.dump(movies, json_file, indent=4)
     with open("series.json", "w") as json_file:
-        json.dump(resultado[1], json_file, indent=4)
+        json.dump(series, json_file, indent=4)
+
+
+    
