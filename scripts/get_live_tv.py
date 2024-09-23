@@ -25,3 +25,9 @@ def get_canales(page):
         page.wait_for_timeout(900)
 
         return canales
+    
+
+page, browser, playwright = init_playwright()
+init_pluto(page,"https://pluto.tv")
+for canal in get_canales(page):
+    print(canal.inner_text())

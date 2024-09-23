@@ -208,7 +208,7 @@ def get_chapters(page,div_programa):
             url = url_base + info_episodio.get_attribute("href")
             num_episodio = info_episodio.locator("h3.episode-name-atc").inner_text()
             duracion = info_episodio.locator("p.numbers").locator("span").all()[1].inner_text()
-            duracion_capitulo = re.search(r"(\d*)[hr ]*(\d*)[ min]*",duracion)
+            duracion_capitulo = re.search(r"(\d*)[hr ]*(\d*)[ ]*min",duracion)
 
 
             duracion_min = 0
