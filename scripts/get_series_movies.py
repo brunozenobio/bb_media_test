@@ -71,12 +71,21 @@ def get_movie(div_programa):
     
 
     if len(caracteristicas_lista) >= 2:
-        rating = caracteristicas_lista[0].locator("span.rating").inner_text() if caracteristicas_lista[0].locator("span.rating").count() > 0 else "N/A" # saco rating de un span, en el primer li encontrado
-        genero = caracteristicas_lista[2].inner_text() # saco el genero en el 3 li encontrado
+        if caracteristicas_lista[0].locator("span.rating").count() > 0:
+            rating = caracteristicas_lista[0].locator("span.rating").inner_text() # saco rating de un span, en el primer li encontrado
+            genero = caracteristicas_lista[2].inner_text() # saco el genero en el 3 li encontrado
 
-        # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
-        duracion_horas = caracteristicas_lista[4].inner_text() 
-        extract_horas = re.search(r"(\d*)[hr ]*(\d*)[ min]*",duracion_horas)
+            # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
+            duracion_horas = caracteristicas_lista[4].inner_text() 
+            extract_horas = re.search(r"(\d*)[hr ]*(\d*)[ min]*",duracion_horas)
+        else:
+            rating = "N/A"
+            genero = caracteristicas_lista[0].inner_text() # saco el genero en el 3 li encontrado
+
+            # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
+            duracion_horas = caracteristicas_lista[2].inner_text() 
+            extract_horas = re.search(r"(\d*)hr[ ]*(\d*)[ min]*",duracion_horas)
+
 
     else:
         rating = "N/A"
@@ -121,10 +130,16 @@ def get_serie(page,div_programa):
 
     if len(caracteristicas) >= 2:
 
-        rating = caracteristicas[0].locator("span.rating").inner_text() if caracteristicas[0].locator("span.rating").count() > 0 else "N/A"
-        genero = caracteristicas[2].inner_text()
+        if caracteristicas[0].locator("span.rating").count() > 0:
+            rating = caracteristicas[0].locator("span.rating").inner_text() if  else "N/A"
+            genero = caracteristicas[2].inner_text()
 
-        temporadas_text = re.search(r"\d+",caracteristicas[6].inner_text())
+            temporadas_text = re.search(r"\d+",caracteristicas[6].inner_text())
+        else:
+            rating =  "N/A"
+            genero = caracteristicas[0].inner_text()
+
+            temporadas_text = re.search(r"\d+",caracteristicas[4].inner_text())
 
     else:
         rating = "N/A"
