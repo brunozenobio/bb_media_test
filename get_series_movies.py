@@ -62,7 +62,7 @@ def get_movie(div_programa):
     """
     
     titulo = div_programa.locator("h2").inner_text() if div_programa.locator("h2").count() > 0  else "N/A" # titulo de la pelicula
-    print(titulo)
+    
     
 
     caracteristicas = div_programa.locator("div").all() # div con las caracteristicas
@@ -70,12 +70,18 @@ def get_movie(div_programa):
     caracteristicas_lista = caracteristicas[0].locator("li").all() # en esta lista estaran las caracteristicas rating,duracion genero
     
 
-    rating = caracteristicas_lista[0].locator("span.rating").inner_text() # saco rating de un span, en el primer li encontrado
-    genero = caracteristicas_lista[2].inner_text() # saco el genero en el 3 li encontrado
+    if len(caracteristicas_lista) >= 2:
+        rating = caracteristicas_lista[0].locator("span.rating").inner_text() if caracteristicas_lista[0].locator("span.rating").count() > 0 else "N/A" # saco rating de un span, en el primer li encontrado
+        genero = caracteristicas_lista[2].inner_text() # saco el genero en el 3 li encontrado
 
-    # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
-    duracion_horas = caracteristicas_lista[4].inner_text() 
-    extract_horas = re.search(r"(?:(\d+) hrs? ?)?(?:(\d+) min)?",duracion_horas)
+        # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
+        duracion_horas = caracteristicas_lista[4].inner_text() 
+        extract_horas = re.search(r"(\d*)hr[ ]*(\d*)[ min]*",duracion_horas)
+        print(extract_horas)
+    else:
+        rating = "N/A"
+        genero = "N/A"
+        extract_horas = None
 
     duracion_movie = 0
     if extract_horas:
@@ -84,7 +90,9 @@ def get_movie(div_programa):
         if horas is not None:
             duracion_movie += int(horas) * 60
         if minutos is not None:
-            duracion_movie += duracion_horas
+            duracion_movie += int(minutos) if minutos else 0
+
+    print(duracion_movie)
     
 
     # del segun div de caracteristicas busco la etiquet p que tiene la sinopsis
@@ -104,20 +112,35 @@ def get_serie(div_programa):
 
     
     """
+ 
+    div_information = div_programa.locator("div").all() 
 
-    div_information = div_programa.locator("div").all()
+    titulo = div_information[0].inner_text() if div_information[0].count() > 0  else "N/A"
 
-    titulo = div_information[0].inner_text()
+
     caracteristicas = div_information[1].locator("li").all()
 
-    rating = caracteristicas[0].locator("span.rating").inner_text()
-    genero = caracteristicas[2].inner_text()
+    if len(caracteristicas) >= 2:
 
-    temporadas_text = re.search(r"\d+",caracteristicas[6].inner_text())
+        rating = caracteristicas[0].locator("span.rating").inner_text() if caracteristicas[0].locator("span.rating").count() > 0 else "N/A"
+        genero = caracteristicas[2].inner_text()
+
+        temporadas_text = re.search(r"\d+",caracteristicas[6].inner_text())
+
+    else:
+        rating = "N/A"
+        genero = "N/A"
+        temporadas_text = None
+
     if temporadas_text:
-        temporadas = int(temporadas_text)
+        temporadas = int(temporadas_text.group(0))
+    else:
+        temporadas = 0
 
-    sinopsis = div_information.locator("//section[contains(@class,'description-0-2-')]").local("p").inner_text()
+
+    print(temporadas)
+
+    sinopsis = div_programa.locator("//section[contains(@class,'description-0-2-')]").locator("p").inner_text()
 
     ## buscar los capitulos
 
@@ -140,7 +163,7 @@ def get_series_movies(datos):
     movies = []
     series = []
 
-    with ThreadPoolExecutor(max_workers=3) as executor: ## clase para trabajar con multihilos
+    with ThreadPoolExecutor(max_workers=5) as executor: ## clase para trabajar con multihilos
         futures = [executor.submit(get_data, valor) for key, valores in datos.items() for valor in valores]
 
         for i, future in enumerate(as_completed(futures), 1):
