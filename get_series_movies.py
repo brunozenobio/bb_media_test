@@ -151,37 +151,7 @@ def get_serie(page,div_programa):
 
 
 
-def get_series_movies(datos):
 
-    """
-    Esta funcion a partir de los datos que recibe, retorna dos listas asociadas a todas las series y peliculas, trabaja con ThreadPoolExecutor para ejecutar multitareas.
-    Patametros:
-        datos(list) : lista con los url de series y peliculas
-    Retorna:
-        tupla con las listas de series y diccionarios
-    """
-    
-    
-    movies = []
-    series = []
-
-    with ThreadPoolExecutor(max_workers=5) as executor: ## clase para trabajar con multihilos
-        futures = [executor.submit(get_data, valor) for key, valores in datos.items() for valor in valores]
-
-        for i, future in enumerate(as_completed(futures), 1):
-            try:
-                programa = future.result()
-                if programa[0] == "movie":
-                    movies.append(programa[1])
-                elif programa[0] == "serie":
-                    series.append(programa[1])
-            
-
-            except Exception as exc:
-                print(f'Error: {exc}')
-                
-
-    return movies,series
 
 
 def get_chapters(page,div_programa):
@@ -215,7 +185,7 @@ def get_chapters(page,div_programa):
         selector_temporadas.select_option(opcion.get_attribute("value")) # elijo la opcion en curso
         page.wait_for_load_state() 
 
-        li_episodios = selector_temporadas.locator("li.episode-container-atc").all()
+        li_episodios = div_programa.locator("li.episode-container-atc").all()
 
         
         episodios = [] 
@@ -234,6 +204,38 @@ def get_chapters(page,div_programa):
 
         
 
+
+def get_series_movies(datos):
+
+    """
+    Esta funcion a partir de los datos que recibe, retorna dos listas asociadas a todas las series y peliculas, trabaja con ThreadPoolExecutor para ejecutar multitareas.
+    Patametros:
+        datos(list) : lista con los url de series y peliculas
+    Retorna:
+        tupla con las listas de series y diccionarios
+    """
+    
+    
+    movies = []
+    series = []
+
+    with ThreadPoolExecutor(max_workers=5) as executor: ## clase para trabajar con multihilos
+        futures = [executor.submit(get_data, valor) for key, valores in datos.items() for valor in valores]
+
+        for i, future in enumerate(as_completed(futures), 1):
+            try:
+                programa = future.result()
+                if programa[0] == "movie":
+                    movies.append(programa[1])
+                elif programa[0] == "serie":
+                    series.append(programa[1])
+            
+
+            except Exception as exc:
+                print(f'Error: {exc}')
+                
+
+    return movies,series
 
 if __name__ == "__main__":
     with open('mi_diccionario.json', 'r') as archivo_json:
