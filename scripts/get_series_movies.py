@@ -77,14 +77,12 @@ def get_movie(div_programa):
 
             # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
             duracion_horas = caracteristicas_lista[4].inner_text() 
-            extract_horas = re.search(r"(\d*)[hr ]*(\d*)[ min]*",duracion_horas)
         else:
             rating = "N/A"
             genero = caracteristicas_lista[0].inner_text() # saco el genero en el 3 li encontrado
 
             # aqui saco la duracion en horas en el 5 li, y luego proceso para trasnformarla a minutos
             duracion_horas = caracteristicas_lista[2].inner_text() 
-            extract_horas = re.search(r"(\d*)hr[ ]*(\d*)[ min]*",duracion_horas)
 
 
     else:
@@ -92,21 +90,11 @@ def get_movie(div_programa):
         genero = "N/A"
         extract_horas = None
 
-    duracion_movie = 0
-    if extract_horas:
-        horas = extract_horas.group(1)
-        minutos = extract_horas.group(2)
-        if horas is not None:
-            duracion_movie += int(horas) * 60
-        if minutos is not None:
-            duracion_movie += int(minutos) if minutos else 0
-
-    
 
     # del segun div de caracteristicas busco la etiquet p que tiene la sinopsis
     sinopsis = caracteristicas[1].locator("p").inner_text()
 
-    return {"title":titulo,"genre":genero,"classification":rating,"duration(min)":duracion_movie,"synopsis":sinopsis}
+    return {"title":titulo,"genre":genero,"classification":rating,"duration(min)":duracion_horas,"synopsis":sinopsis}
 
 
 def get_serie(page,div_programa):
@@ -208,19 +196,9 @@ def get_chapters(page,div_programa):
             url = url_base + info_episodio.get_attribute("href")
             num_episodio = info_episodio.locator("h3.episode-name-atc").inner_text()
             duracion = info_episodio.locator("p.numbers").locator("span").all()[1].inner_text()
-            duracion_capitulo = re.search(r"(\d*)[hr ]*(\d*)[ ]*min",duracion)
 
 
-            duracion_min = 0
-            if duracion_capitulo:
-                horas = duracion_capitulo.group(1)
-                minutos = duracion_capitulo.group(2)
-                if horas is not None:
-                    duracion_min += int(horas) * 60
-                if minutos is not None:
-                    duracion_min += int(minutos) if minutos else 0
-
-            episodios.append({"episode":num_episodio,"duration(min)":duracion_min,"url_episode":url})
+            episodios.append({"episode":num_episodio,"duration(min)":duracion,"url_episode":url})
 
         temporadas.append({'season':opcion.inner_text(),"episodes":episodios})
 
