@@ -35,7 +35,7 @@ def get_data(url):
 
             elif "series" in url:
 
-                serie = get_serie(div_programa)
+                serie = get_serie(page,div_programa)
                 serie["url"] = url
                 print(serie)
                 return "serie",serie
@@ -101,7 +101,7 @@ def get_movie(div_programa):
     return {"title":titulo,"genre":genero,"classification":rating,"duration(min)":duracion_movie,"synopsis":sinopsis}
 
 
-def get_serie(div_programa):
+def get_serie(page,div_programa):
 
     """
     Esta funcion, la informacion de una serie
@@ -144,7 +144,9 @@ def get_serie(div_programa):
 
     ## buscar los capitulos
 
-    return {"title":titulo,"genre":genero,"classification":rating,"seasons":temporadas,"synopsis":sinopsis}
+    temporadas_total = get_chapters(page,div_programa)
+
+    return {"title":titulo,"genre":genero,"classification":rating,"seasons":temporadas,"synopsis":sinopsis,"seasons":temporadas_total}
 
 
 
@@ -182,7 +184,7 @@ def get_series_movies(datos):
     return movies,series
 
 
-def get_chapters(url_base,page,div_programa):
+def get_chapters(page,div_programa):
     """
      Esta funcion se en  carga de para cada serie, navegar y obtener todos sus episodios
 
@@ -195,6 +197,9 @@ def get_chapters(url_base,page,div_programa):
         
         
     """
+
+
+    url_base = " https://pluto.tv"
      
     selector_temporadas = div_programa.locator("select") # tomo el selector
 
