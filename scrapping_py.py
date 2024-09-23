@@ -1,5 +1,7 @@
 from scripts.get_on_demand import *
 import time
+from scripts.init_pluto_tv import *
+from scripts.get_series_movies import * 
 
 
 def run():
@@ -42,3 +44,6 @@ def run():
 
     tiempo_final = time.time()
     print(f"Tiempo final de la ejecución {tiempo_final - tiempo_inicial}")
+
+
+run()

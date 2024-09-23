@@ -1,5 +1,4 @@
-from init_pluto_tv import *
-from get_series_movies import * 
+
 def goto_on_demand(page):
     """
     Esta funcion,hace click enb la seccion on demand de pluto tv.
@@ -124,25 +123,6 @@ def get_url_series_movies(page,programas,url_base):
     return series_and_movies  
 
 
-def run():
-    page, browser, playwright = init_playwright()
-    url_base = "https://pluto.tv"
-    init_pluto(page, url_base)
-    goto_on_demand(page)
 
-    programas = get_url_secciones(page, url_base)
-    series_movies = get_url_series_movies(page, programas, url_base)
-
-
-
-    browser.close()  # Cerramos el navegador al finalizar
-    playwright.stop()  # Detenemos Playwright para evitar el error del loop
-
-    print(len(series_movies))
-    movies,series = get_series_movies(series_movies)
-
-    write_json(movies=movies,series=series_movies)
-
-run()
 
 

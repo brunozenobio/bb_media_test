@@ -131,7 +131,7 @@ def get_serie(page,div_programa):
     if len(caracteristicas) >= 2:
 
         if caracteristicas[0].locator("span.rating").count() > 0:
-            rating = caracteristicas[0].locator("span.rating").inner_text() if  else "N/A"
+            rating = caracteristicas[0].locator("span.rating").inner_text()
             genero = caracteristicas[2].inner_text()
 
             temporadas_text = re.search(r"\d+",caracteristicas[6].inner_text())
