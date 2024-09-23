@@ -34,11 +34,12 @@ def get_canales(url_base):
             canales_nombres.add(nombre_canal)
             canales_url.add(url_canal)
 
-        programas_scroller.evaluate("(el) => { el.scrollTop += arguments[0]; }", scroll_amount)
+        programas_scroller.evaluate("(el) => { el.scrollTop += 100; }", programas_scroller)
         page.wait_for_timeout(timeout)
 
 
     browser.close()
+    playwright.stop()
 
     return canales_nombres,canales_url
 

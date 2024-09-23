@@ -50,6 +50,7 @@ def get_data(url):
 
     finally:
         browser.close()
+        playwright.stop()
 
 
 
@@ -93,13 +94,13 @@ def get_movie(div_programa):
     else:
         rating = "N/A"
         genero = "N/A"
-        extract_horas = None
+        duracion_horas = "N/A"
 
 
     # del segun div de caracteristicas busco la etiquet p que tiene la sinopsis
     sinopsis = caracteristicas[1].locator("p").inner_text()
 
-    return {"title":titulo,"genre":genero,"classification":rating,"duration(min)":duracion_horas,"synopsis":sinopsis}
+    return {"title":titulo,"genre":genero,"classification":rating,"duration":duracion_horas,"synopsis":sinopsis}
 
 
 def get_serie(page,div_programa):
@@ -219,7 +220,7 @@ def get_series_movies(datos):
     """
     
     
-    movies = pd.DataFrame()
+    movies = pd.DataFrame(columns = ['title', 'genre', 'classification', 'duration', 'synopsis','url'])
     series = []
 
     with ThreadPoolExecutor(max_workers=5) as executor: ## clase para trabajar con multihilos
