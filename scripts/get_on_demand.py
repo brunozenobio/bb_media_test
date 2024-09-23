@@ -47,7 +47,7 @@ def get_url_secciones(page,url_base):
                 id_movies = div_cateogira.get_attribute("data-id")
             if div_cateogira.inner_text().lower() == "series":
                 id_series = div_cateogira.get_attribute("data-id")
-            if div_cateogira.inner_text() == "retro": # cuando aparezca la categoria retro se corta el bucle
+            if div_cateogira.inner_text().lower == "retro": # cuando aparezca la categoria retro se corta el bucle
                 break 
 
         # cada sección ya sea series o peliculas es tomado, para luego iterar sobre estas, y finalmente sacar el view all de cada seccion.

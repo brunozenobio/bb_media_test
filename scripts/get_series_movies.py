@@ -1,6 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from playwright.sync_api import sync_playwright
-from init_pluto_tv import *
+from scripts.init_pluto_tv import *
 import json
 import re
 import pandas as pd
