@@ -2,6 +2,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from playwright.sync_api import sync_playwright
 import json
 
+
+
 def get_data(url):
     programa = {}
     with sync_playwright() as playwright:
@@ -15,14 +17,16 @@ def get_data(url):
 
         try:
             page.goto(url)
-            page.set_viewport_size({"width": 1280, "height": 720})
-            page.wait_for_load_state('networkidle', timeout=60000)
+
+            page.wait_for_load_state()
 
             div_programa = page.locator("div.inner")
 
 
             if "movies" in url:
+                
                 titulo = div_programa.locator("h2").inner_text() if div_programa.locator("h2") else "N/A"
+                print(f"pelicula {titulo} ")
                 caracteristicas = div_programa.locator("div").all()
                 sinopsis = caracteristicas[1].locator("p").inner_text() if len(caracteristicas) > 1 else "Sin sinopsis disponible"
 
@@ -46,7 +50,7 @@ def get_series_movies(datos):
     cantidad_error = 0  #cantidad de errores
     total = sum(len(valores) for valores in datos.values())  # cantidad de urls
 
-    with ThreadPoolExecutor(max_workers=2) as executor: ## clase para trabajar con multihilos
+    with ThreadPoolExecutor(max_workers=4) as executor: ## clase para trabajar con multihilos
         futures = [executor.submit(get_data, valor) for key, valores in datos.items() for valor in valores]
 
         for i, future in enumerate(as_completed(futures), 1):
