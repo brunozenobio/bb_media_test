@@ -6,6 +6,8 @@ from scripts.get_series_movies import *
 
 def run():
 
+    url_base = "https://pluto.tv"
+
     tiempo_inicial = time.time()
 
     print("=======Inicia la ejecución=======")
@@ -15,7 +17,7 @@ def run():
 
     # iniciamos playwright en pluto
     page, browser, playwright = init_playwright()
-    url_base = "https://pluto.tv"
+    
     init_pluto(page, url_base)
 
     ## obtenemos la  lista de pelicukas y series unicas.
@@ -27,7 +29,7 @@ def run():
     playwright.stop()  # Detenemos Playwright para evitar el error del loop
 
     time_medio = time.time()
-    print(f"Tiempo hasta obtener la lista de peliculas {time_medio - tiempo_inicial}")
+    print(f"Tiempo hasta obtener la lista de peliculas y series {time_medio - tiempo_inicial}")
     
     ## obtenemos los json de series y peliculas y las guardamos
     movies,series = get_series_movies(series_movies)

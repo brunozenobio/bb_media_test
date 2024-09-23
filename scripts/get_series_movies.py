@@ -1,50 +1,55 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from playwright.sync_api import sync_playwright
+from init_pluto_tv import *
 import json
 import re
-
+import pandas as pd
 
 def get_data(url):
-    with sync_playwright() as playwright:
-        chromium = playwright.chromium
-        browser = chromium.launch(headless=True, args=['--disable-blink-features=AutomationControlled'])
-        context = browser.new_context(user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-        page = context.new_page()
-        context.add_init_script("""
-            Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-        """)
+    """
+    Esta funcion se encarga de buscar una pelicula o serie a traves del id del link
 
-        try:
-            page.goto(url)
+    Parametros:
+        url(str) Url del programa
 
-            page.wait_for_load_state("domcontentloaded")
+    Retorna:
+        tupla : donde el primer valor es un string asociado a si es "serie" o "pelicula" y el segundo el diccionario con los datos
+     """
+    page, browser, playwright = init_playwright() # inicializo platwright
+    
 
-            page.wait_for_selector("div.inner")
+    try: 
+        # abro el url y espero a que cargue
+        init_pluto(page,url) 
+
+        page.wait_for_load_state("domcontentloaded")
+
+        page.wait_for_selector("div.inner")
 
 
-            div_programa = page.locator("div.inner")
+        div_programa = page.locator("div.inner")
 
 
 
 
-            if "movies" in url:
+        if "movies" in url:
 
-                movie = get_movie(div_programa)
-                movie["url"] = url
-                return "movie",movie
+            movie = get_movie(div_programa)
+            movie["url"] = url
+            return "movie",movie
 
-            elif "series" in url:
+        elif "series" in url:
 
-                serie = get_serie(page,div_programa)
-                serie["url"] = url
-                print(serie)
-                return "serie",serie
+            serie = get_serie(page,div_programa)
+            serie["url"] = url
 
-        except Exception as e:
-            print(f"Error al procesar {url}: {e}")
+            return "serie",serie
 
-        finally:
-            browser.close()
+    except Exception as e:
+        print(f"Error al procesar {url}: {e}")
+
+    finally:
+        browser.close()
 
 
 
@@ -134,13 +139,9 @@ def get_serie(page,div_programa):
         genero = "N/A"
         temporadas_text = None
 
-    if temporadas_text:
-        temporadas = int(temporadas_text.group(0))
-    else:
-        temporadas = 0
 
 
-    print(temporadas)
+
 
     sinopsis = div_programa.locator("//section[contains(@class,'description-0-2-')]").locator("p").inner_text()
 
@@ -198,7 +199,7 @@ def get_chapters(page,div_programa):
             duracion = info_episodio.locator("p.numbers").locator("span").all()[1].inner_text()
 
 
-            episodios.append({"episode":num_episodio,"duration(min)":duracion,"url_episode":url})
+            episodios.append({"episode":num_episodio,"duration":duracion,"url_episode":url})
 
         temporadas.append({'season':opcion.inner_text(),"episodes":episodios})
 
@@ -218,7 +219,7 @@ def get_series_movies(datos):
     """
     
     
-    movies = []
+    movies = pd.DataFrame()
     series = []
 
     with ThreadPoolExecutor(max_workers=5) as executor: ## clase para trabajar con multihilos
@@ -228,7 +229,7 @@ def get_series_movies(datos):
             try:
                 programa = future.result()
                 if programa[0] == "movie":
-                    movies.append(programa[1])
+                    movies.loc[len(movies)] = programa[1]
                 elif programa[0] == "serie":
                     series.append(programa[1])
             
@@ -241,10 +242,9 @@ def get_series_movies(datos):
 
 
 def write_json(movies,series):
-    with open("movies.json", "w") as json_file:
-        json.dump(movies, json_file, indent=4)
-    with open("series.json", "w") as json_file:
-        json.dump(series, json_file, indent=4)
+    movies.to_csv("./database/movies.csv",index=False)
+    with open("./database/series.json", "w") as json_file:
+        json.dump(series, json_file, indent=5)
 
 
     

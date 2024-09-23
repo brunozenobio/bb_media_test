@@ -37,7 +37,7 @@ def get_url_secciones(page,url_base):
 
 
     ### ACA VOY A SCROLLEAR EN LA SECCION ON DEMAND, PARA EXTRAER EL VIEW ALL LINK DE CADA SECCION
-    for _ in range(55):
+    while True:
 
         div_cateogira = div_programas.locator("div.mainCategory")
             
@@ -47,6 +47,8 @@ def get_url_secciones(page,url_base):
                 id_movies = div_cateogira.get_attribute("data-id")
             if div_cateogira.inner_text().lower() == "series":
                 id_series = div_cateogira.get_attribute("data-id")
+            if div_cateogira.inner_text() == "retro": # cuando aparezca la categoria retro se corta el bucle
+                break 
 
         # cada sección ya sea series o peliculas es tomado, para luego iterar sobre estas, y finalmente sacar el view all de cada seccion.
         secciones = div_programas.locator("section.category").all()
