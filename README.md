@@ -57,7 +57,7 @@ Finalmente se guardaron los datos en la carpeta [database](./database), la cual 
 - [**`movies.csv `**](./database/movies.csv): Una tabla con las peliculas y su metadata.
 - [**`series.json`**](./database/series.json): Un json con las series y su metadata los episodios de cada serie y sus metadatas
 - [**`channels.json`**](./database/channels.json): Un json con la información de un cada canal, y la grilla de los programas mas próximos.
-# 🛠️ Instalación
+#  Instalación
 
 ## 1. Primero clona el repositorio.
 ```bash
