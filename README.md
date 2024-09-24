@@ -1,4 +1,4 @@
-﻿<p align="center"><img src="./images/OIG.Lo7.dES.jpeg"></p>
+
 
 # Prueba Tenica 
 
@@ -14,17 +14,19 @@
 ## **Tecnolgías usadas**
 
 ![](https://img.shields.io/badge/Python-grey?style=for-the-badge&logo=python)
-![](https://img.shields.io/badge/playwright%201.47.0-yellow?style=for-the-badge)
-![](https://img.shields.io/badge/pandas%202.2.3-yellow?style=for-the-badge&logo=)
+![](https://img.shields.io/badge/playwright%201.47.0-blue?style=for-the-badge)
+![](https://img.shields.io/badge/pandas%202.2.3-blue?style=for-the-badge&logo=)
+
+
 
 
 ---
 
 # Introducción
 
-A continuación se explicara el proyecto realizado para la prueba tecnica. En este tenía como objetivo hacer web scrapping en la pagina de Pluto Tv, y de estas extraer todas las peliculas y series junto a su metadata, así tambien como todos los canales.
+A continuación, se explicará el proyecto realizado para la prueba técnica. El objetivo era hacer web scraping en la página de Pluto TV, y extraer todas las películas y series junto a su metadata, así como todos los canales.
 
-Es un plus obtener mas data de cada sección, como episodios por serie, y grilla de canales, que el codigo se ejecute en menos de 2 horas, indentificar modelos de negocios y hacer analisis y/o procesamiento de los datos.
+Es un plus obtener más datos de cada sección, como episodios por serie y grilla de canales, que el código se ejecute en menos de 2 horas, identificar modelos de negocio y hacer análisis y/o procesamiento de los datos.
 
 
 
@@ -33,20 +35,19 @@ Es un plus obtener mas data de cada sección, como episodios por serie, y grilla
 # Desarrollo
 
 
-Para esto, se ha usado la libreria de **`Playwright`**, la cual permite hacer scrapping en sitios web flexibles e interactivos, lo cual fue esencial para realizar esta tarea.
-Tambien, para logral la mayor optimización del tiempo de scrapping, se uso la libreria de python base **`concurrent`** la cual me permitio trabajar en hilos, y asi poder cargar conjuntamente muchas peliculas y series.
+Para esto, se ha usado la librería **`Playwright`**, que permite hacer scraping en sitios web flexibles e interactivos, lo cual fue esencial para realizar esta tarea. También, para lograr la mayor optimización del tiempo de scraping, se utilizó la librería de Python base **`concurrentt`**, que me permitió trabajar en hilos y cargar conjuntamente muchas películas y series.
 
 ### Entorno de codigo
 
 El script principal que ejecuta todo el proceso es [scrapping.py](./scrapping.py),este se encarga de realizar las siguientes tareas:
 - **`realizar la obtención de series y peliculas`**: Para en la carpeta [scripts](./scripts/), estan todos los scripts necesarios para realizar esas tareas:
     - [init_pluto_tv.py](./scripts/init_pluto_tv.py) : Inicia Playwright y abre un enlace
-    - [get_series_demand.py](./scripts/get_on_demand.py) : Con pluto iniciado va a la seccion On Demand, y obtiene los enlaces de todas las series y peliculas.
+    - [get_series_demand.py](./scripts/get_on_demand.py) : Con pluto iniciado va a la seccion On Demand, y obtiene los enlaces de todas las series y películas.
 
-    - [get_series_movies.py](./scripts/get_series_movies.py) : Para cada serie y pelicula, guarda las peliculas en un csv y las series con sus episodios en un json.
+    - [get_series_movies.py](./scripts/get_series_movies.py) : Para cada serie y película, guarda las peliculas en un csv y las series con sus episodios en un json.
 
     - [get_channels](./scripts/get_channels.py) : Obtiene todos los canales y sus url y los guarda en un csv.
-- **`Monitorear el tiempo de ejecución`**: Para cada proceso realizo, imprime el tiempo tardado en ejecutarse, lo cual permite tener un mejor control y poder conocer que secciones optimizar.
+- **`Monitorear el tiempo de ejecución`**:  Para cada proceso realizado, se imprime el tiempo que tardó en ejecutarse, lo que permite tener un mejor control y conocer qué secciones optimizar.
 
 
 
@@ -102,13 +103,13 @@ python scrapping.py  > output.txt
 
 En el archivo output.txt se puede ver el tiempo demorado en cada ejecución:
 ```bash
-Tiempo total de ejecución:  segundos
+Tiempo total de ejecución:  1.7 horas
 ```
 
 Este fue posible, gracias a la optimización lograda trabajando con multiprocesos.
 
 ### Peliculas:
-![](./images/movies.png)  
+!  
 
 Se obtuvo un total de 1589 peliculas y un total de 22 generos
 
@@ -124,17 +125,13 @@ La serie con mayor cantidad de temporadas es South Park con 25 temporadas.
 Se obtuvo un total de 53 canales 
 
 
-## Bibliografias
-- [Instituto geografico nacional](https://www.ign.gob.ar/)
-- [ENACOM](https://www.baenegocios.com/negocios/El-desafio-de-la-Argentina-en-el-camino-de-la-fibra-optica-20200610-0092.html)
-
 ## Contacto
 
 <div style="display: flex; align-items: center;">
   <a href="https://www.linkedin.com/in/brunozenobio/" style="margin-right: 10px;">
-    <img src="./images/in_linked_linkedin_media_social_icon_124259.png" alt="LinkedIn" width="40" height="40">
+    <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn" width="40" height="40">
   </a>
   <a href="mailto:brunozenobio4@gmail.com" style="margin-right: 10px;">
-    <img src="./images/gmail_new_logo_icon_159149.png" alt="Gmail" width="40" height="40">
+    <img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Gmail" width="40" height="40">
   </a>
 </div>
