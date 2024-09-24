@@ -42,12 +42,19 @@ def get_url_secciones(page,url_base):
         div_cateogira = div_programas.locator("div.mainCategory")
             
         ## sentencia que define la variable id_movies y id_series en funcion del contenido
+
         if div_cateogira.count() == 1:
-            if div_cateogira.inner_text().lower() == "películas":
+
+            # extraigo el id de movies
+            if div_cateogira.inner_text().lower() == "películas": 
                 id_movies = div_cateogira.get_attribute("data-id")
-            if div_cateogira.inner_text().lower() == "series":
+
+            # extraigo el id de series
+            elif div_cateogira.inner_text().lower() == "series":   
                 id_series = div_cateogira.get_attribute("data-id")
-            if div_cateogira.inner_text().lower() == "retro": # cuando aparezca la categoria retro se corta el bucle
+             
+            # cuando aparezca retro, se corta el while, y se termina de scrollear
+            elif div_cateogira.inner_text().lower() == "retro": 
                 break 
 
         # cada sección ya sea series o peliculas es tomado, para luego iterar sobre estas, y finalmente sacar el view all de cada seccion.

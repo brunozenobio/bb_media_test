@@ -1,6 +1,13 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
+
 from playwright.sync_api import sync_playwright
+
+## libreria para el trabajo en multiprocesos
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
+# libreria que inicia pluto
 from scripts.init_pluto_tv import *
+
+#librerias para el guardado y manejo de datos, json,pandas re(extraer patrones)
 import json
 import re
 import pandas as pd
@@ -31,7 +38,7 @@ def get_data(url):
 
 
 
-
+        #en funcion de si movies o series esta en url se obtienen los datos de funciones distintas
         if "movies" in url:
 
             movie = get_movie(div_programa)
@@ -67,6 +74,8 @@ def get_movie(div_programa):
     
     """
     
+    ## asigno los valores de titulo,rating,genero,duracion, si estos no estan se pone N/A
+
     titulo = div_programa.locator("h2").inner_text() if div_programa.locator("h2").count() > 0  else "N/A" # titulo de la pelicula
     
     
@@ -128,17 +137,17 @@ def get_serie(page,div_programa):
             rating = caracteristicas[0].locator("span.rating").inner_text()
             genero = caracteristicas[2].inner_text()
 
-            temporadas_text = re.search(r"\d+",caracteristicas[6].inner_text())
+
         else:
             rating =  "N/A"
             genero = caracteristicas[0].inner_text()
 
-            temporadas_text = re.search(r"\d+",caracteristicas[4].inner_text())
+
 
     else:
         rating = "N/A"
         genero = "N/A"
-        temporadas_text = None
+
 
 
 
@@ -148,8 +157,8 @@ def get_serie(page,div_programa):
 
     ## buscar los capitulos
 
-    temporadas_total = get_chapters(page,div_programa)
-
+    temporadas_total = get_chapters(page,div_programa) # esta funcion retorna una lista con los cpaitulos y temporadas, que luego es asignada a seasons
+ 
     return {"title":titulo,"genre":genero,"classification":rating,"synopsis":sinopsis,"seasons":temporadas_total}
 
 
@@ -198,9 +207,10 @@ def get_chapters(page,div_programa):
             url = url_base + info_episodio.get_attribute("href")
             num_episodio = info_episodio.locator("h3.episode-name-atc").inner_text()
             duracion = info_episodio.locator("p.numbers").locator("span").all()[1].inner_text()
+            sinopsis_episodio = info_episodio.locator("p.episode-description-atc").inner_text() if info_episodio.locator("p.episode-description-atc").count() > 0 else "N/A"
 
 
-            episodios.append({"episode":num_episodio,"duration":duracion,"url_episode":url})
+            episodios.append({"episode":num_episodio,"duration":duracion,"synopsis_episode":sinopsis_episodio,"url_episode":url})
 
         temporadas.append({'season':opcion.inner_text(),"episodes":episodios})
 
@@ -226,7 +236,7 @@ def get_series_movies(datos):
     with ThreadPoolExecutor(max_workers=5) as executor: ## clase para trabajar con multihilos
         futures = [executor.submit(get_data, url) for url in datos]
 
-        for i, future in enumerate(as_completed(futures), 1):
+        for _, future in enumerate(as_completed(futures), 1):
             try:
                 programa = future.result()
                 if programa[0] == "movie":

@@ -1,5 +1,8 @@
-from scripts.get_on_demand import *
+# importo time para contabilizar el tiempo de ejecución
 import time
+
+# de la carpeta scripts importo todos los modulos y sus funciones
+from scripts.get_on_demand import *
 from scripts.init_pluto_tv import *
 from scripts.get_series_movies import * 
 from scripts.get_channels import *
@@ -7,6 +10,7 @@ from scripts.get_channels import *
 
 def scrape_pluto_tv_data():
 
+    # url base de pluto
     url_base = "https://pluto.tv"
     tiempo_inicial = time.time()
 
@@ -15,6 +19,8 @@ def scrape_pluto_tv_data():
     # iniciamos pluto
     page, browser, playwright = init_playwright()
     init_pluto(page, url_base)
+
+    ######################## ON DEMAND ######################## 
 
     # obtenemos las secciones de peliculas y series
     goto_on_demand(page)
@@ -38,6 +44,8 @@ def scrape_pluto_tv_data():
     write_json(movies=movies, series=series)
     tiempo_series_and_movies = time.time()
     print(f"Tiempo en guardar todas las películas y series: {tiempo_series_and_movies - tiempo_inicial:.2f} segundos")
+
+   ########################  LIVE TV ######################## 
 
     # se obtienen todos los canales
     print("Cargando los canales...")

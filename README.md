@@ -109,7 +109,7 @@ Tiempo total de ejecución:  1.7 horas
 Este fue posible, gracias a la optimización lograda trabajando con multiprocesos.
 
 ### Peliculas:
-!  
+![](./images/movies.png)
 
 Se obtuvo un total de 1589 peliculas y un total de 22 generos
 
@@ -119,10 +119,15 @@ Se obtuvo un total de 211 series con 18 generos.
 
 La serie con mayor cantidad de temporadas es South Park con 25 temporadas.
 
+### Top 10 series con mayor cantididad de episodios.
+![](./images/episodes.png)
+
 ### Canales
 ![](./images/channels.png)
 
 Se obtuvo un total de 53 canales 
+
+
 
 
 ## Contacto
