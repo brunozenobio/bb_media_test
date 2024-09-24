@@ -7,7 +7,7 @@
 
 - [Introducción](#introducción)
 - [Desarrollo](#desarrollo)
-- [Instalación](#instalacion)
+- [Instalación](#instalación)
 - [Conclusión](#conclusiones-y-resultados)
 - [Contacto](#contacto)
 
