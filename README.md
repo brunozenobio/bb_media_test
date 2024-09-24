@@ -46,7 +46,7 @@ El script principal que ejecuta todo el proceso es [scrapping.py](./scrapping.py
 
     - [get_series_movies.py](./scripts/get_series_movies.py) : Para cada serie y película, guarda las peliculas en un csv y las series con sus episodios en un json.
 
-    - [get_channels](./scripts/get_channels.py) : Obtiene todos los canales y sus url y los guarda en un csv.
+    - [get_channels](./scripts/get_channels_programs.py.py) : Obtiene todos los canales sus url, y los programas mas proximos junto a su horario de transmisión y se guardan en un formato json.
 - **`Monitorear el tiempo de ejecución`**:  Para cada proceso realizado, se imprime el tiempo que tardó en ejecutarse, lo que permite tener un mejor control y conocer qué secciones optimizar.
 
 
@@ -56,8 +56,7 @@ El script principal que ejecuta todo el proceso es [scrapping.py](./scrapping.py
 Finalmente se guardaron los datos en la carpeta [database](./database), la cual contiene:
 - [**`movies.csv `**](./database/movies.csv): Una tabla con las peliculas y su metadata.
 - [**`series.json`**](./database/series.json): Un json con las series y su metadata los episodios de cada serie y sus metadatas
-- [**`channels.csv`**](./database/channels.csv): Una tabla con la información (nombre y url) de cada canal
-
+- [**`channels.json`**](./database/channels.json): Un json con la información de un cada canal, y la grilla de los programas mas próximos.
 # 🛠️ Instalación
 
 ## 1. Primero clona el repositorio.
@@ -103,7 +102,7 @@ python scrapping.py  > output.txt
 
 En el archivo output.txt se puede ver el tiempo demorado en cada ejecución:
 ```bash
-Tiempo total de ejecución:  1.7 horas
+Tiempo total de ejecución:  1.98 horas
 ```
 
 Este fue posible, gracias a la optimización lograda trabajando con multiprocesos.
@@ -111,11 +110,11 @@ Este fue posible, gracias a la optimización lograda trabajando con multiproceso
 ### Peliculas:
 ![](./images/movies.png)
 
-Se obtuvo un total de 1589 peliculas y un total de 22 generos
+Se obtuvo un total de 1799 peliculas y un total de 23 generos
 
 ### Series:
 ![](./images/series.png)
-Se obtuvo un total de 211 series con 18 generos.
+Se obtuvo un total de 210 series con 18 generos.
 
 La serie con mayor cantidad de temporadas es South Park con 25 temporadas.
 
@@ -125,7 +124,7 @@ La serie con mayor cantidad de temporadas es South Park con 25 temporadas.
 ### Canales
 ![](./images/channels.png)
 
-Se obtuvo un total de 53 canales 
+Se obtuvo un total de 178 canales 
 
 
 

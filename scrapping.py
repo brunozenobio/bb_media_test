@@ -5,7 +5,7 @@ import time
 from scripts.get_on_demand import *
 from scripts.init_pluto_tv import *
 from scripts.get_series_movies import * 
-from scripts.get_channels import *
+from scripts.get_channels_programs import *
 
 
 def scrape_pluto_tv_data():
@@ -49,15 +49,15 @@ def scrape_pluto_tv_data():
 
     # se obtienen todos los canales
     print("Cargando los canales...")
-    name_channel, url_channel = get_canales(url_base)
-    df_channels = channel_to_pandas(url_channel, name_channel)
-    print(f"Se obtuvieron {len(df_channels)} canales en {time.time() - tiempo_inicial:.2f} segundos")
+    channels= get_channels(url_base)
+    channels_programs = get_channels_unique(channels)
+    print(f"Se obtuvieron {len(channels_programs)} canales en {time.time() - tiempo_inicial:.2f} segundos")
 
     # se guardan en la base de datos
     print("Guardando canales...")
-    write_channels(df_channels)
+    write_json_channels(channels_programs)
     tiempo_canales = time.time()
-    print(f"Tiempo en guardar todos los canales: {tiempo_canales - tiempo_series_and_movies:.2f} segundos")
+    print(f"Tiempo en guardar todos los canales y programas: {tiempo_canales - tiempo_series_and_movies:.2f} segundos")
 
     # se calcula el tiempo final del script
     tiempo_final = time.time()
