@@ -8,7 +8,7 @@
 - [Introducción](#introducción)
 - [Desarrollo](#desarrollo)
 - [Instalación](#instalación)
-- [Conclusión](#conclusionesyresultados)
+- [Conclusión](#conclusiones-y-resultados)
 - [Contacto](#contacto)
 
 ## **Tecnolgías usadas**
@@ -104,6 +104,7 @@ python scrapping.py  > output.txt
 El modelo de negocios de Pluto TV se basa principalmente en los anuncios pagados, los cuales, al ser un servicio de streaming gratuito, pueden llegar a una gran cantidad de espectadores.
 
 Además, Pluto TV colabora con distintos productores para obtener los derechos de transmisión de contenidos.
+
 ---
 En el archivo output.txt se puede ver el tiempo demorado en cada ejecución:
 ```bash
