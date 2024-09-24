@@ -74,3 +74,7 @@ def write_channels(df):
     
     """
     df.to_csv("./database/channels.csv", index=False)
+
+
+#print(channel_to_pandas(get_canales("https://pluto.tv")))
+
