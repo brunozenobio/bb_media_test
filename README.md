@@ -1,6 +1,6 @@
 
 
-# Prueba Ténica 
+# Prueba Técnica 
 
 
 ## **Tabla de Contenidos**
